@@ -278,8 +278,19 @@ namespace LinqTutorials
         /// </summary>
         public static IEnumerable<object> Task10()
         {
-            IEnumerable<object> result = null;
-            return result;
+            DateTime? null3 = new DateTime();
+            string null2 = null;
+
+            var first = Emps
+                .Select(emp => new { Ename = emp.Ename, Job = emp.Job, HireDate = emp.HireDate })
+                .ToList();
+
+            var second = Emps
+                .Select(emp => new { Ename = "Brak wartości", Job = null2, HireDate = null3 });
+
+            var all = first.Union(second);
+
+            return all;
         }
 
         /// <summary>
@@ -295,7 +306,10 @@ namespace LinqTutorials
         /// </summary>
         public static IEnumerable<object> Task11()
         {
-            IEnumerable<object> result = null;
+            var result = Emps.GroupBy(e => e.Deptno)
+                .Where(e => e.Count() > 1)
+                .Select(e => new { n = e.Key, num = e.Count() });
+
             return result;
         }
 
@@ -321,9 +335,10 @@ namespace LinqTutorials
         /// </summary>
         public static int Task13(int[] arr)
         {
-            int result = 0;
-            //result=
+            int result = arr.GroupBy(e => e).Where(e => e.Count() % 2 != 0).Select(e => e.Key).First();
             return result;
+            
+
         }
 
         /// <summary>
@@ -332,10 +347,14 @@ namespace LinqTutorials
         /// </summary>
         public static IEnumerable<Dept> Task14()
         {
-            IEnumerable<Dept> result = null;
-            //result =
+            IEnumerable<Dept> result = Emps.GroupBy(e => e.Deptno)
+                .Where(e => e.Count() == 5 || e.Count() == 0)
+                .OrderBy(e => e.Key)
+                .Select(e => new Dept { Deptno = (int)(e.Key) }); 
+
             return result;
         }
+
         
         /// <summary>
         ///     SELECT Job AS Praca, COUNT(1) LiczbaPracownikow FROM Emps
@@ -344,10 +363,10 @@ namespace LinqTutorials
         ///     HAVING COUNT(*)>2
         ///     ORDER BY COUNT(*) DESC;
         /// </summary>
-        public static IEnumerable<Dept> Task15()
+        public static IEnumerable<Emp> Task15()
         {
-            var result = Emps.Where(e => e.Job.Contains("A")).GroupBy(e => e.Job).Where(group => group.Count() > 2)
-                .OrderByDescending(group => group.Count()).Select(group => new Dept { Job = group.Key });
+            var result = Emps.Where(e => e.Job.Contains("A")).GroupBy(e => e.Job).Where(e => e.Count() > 2)
+                .OrderByDescending(e => e.Count()).Select(e => new Emp { Job = e.Key });
                 
             
             return result;
@@ -358,11 +377,8 @@ namespace LinqTutorials
         /// </summary>
         public static IEnumerable<Dept> Task16()
         {
-            IEnumerable<Dept> result = null;
+            var result = Emps.Join(Depts, emp => emp.Deptno, dept => dept.Deptno, (emp, dept) => new Dept { Deptno = dept.Deptno, Dname = dept.Dname, Loc = dept.Loc });
 
-            IEnumerable<Emp> emps = null;
-            
-            //result =
             return result;
         }
     }
