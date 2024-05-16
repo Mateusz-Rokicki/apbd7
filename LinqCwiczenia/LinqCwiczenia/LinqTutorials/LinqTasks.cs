@@ -346,8 +346,8 @@ namespace LinqTutorials
         /// </summary>
         public static IEnumerable<Dept> Task15()
         {
-            IEnumerable<Dept> result = Emps.Where(e => e.Job.Contains("A")).GroupBy(e => e.Job)
-                .Where(e => e.Count() > 2).OrderByDescending(e => e.Count()).Select(emp => new{Praca=emp.Key});
+            var result = Emps.Where(e => e.Job.Contains("A")).GroupBy(e => e.Job).Where(group => group.Count() > 2)
+                .OrderByDescending(group => group.Count()).Select(group => new Dept { Job = group.Key });
                 
             
             return result;
