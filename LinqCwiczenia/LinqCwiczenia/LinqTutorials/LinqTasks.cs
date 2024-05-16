@@ -320,9 +320,12 @@ namespace LinqTutorials
         /// The method should return only those employees who have at least 1 direct subordinate.
         /// Employees should be sorted within the collection by surname (ascending) and salary (descending).
         /// </summary>
-        public static IEnumerable<Emp> Task12()
+        public static IEnumerable<Emp> Task12(this IEnumerable<Emp> emps)
         {
-            IEnumerable<Emp> result = null;
+            var result = emps.Where(e => e.Mgr != null)
+                .OrderBy(e=> e.Ename)
+                .ThenByDescending(e => e.Salary);
+
             return result;
         }
 
